@@ -9,6 +9,7 @@ namespace CarInformator.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
+        
         private readonly DataContext _context;
         public CarController(DataContext context)
         {
@@ -28,6 +29,7 @@ namespace CarInformator.Controllers
                 return BadRequest("Car not found.");
             return Ok(car);
         }
+
         [HttpPost]
         public async Task<ActionResult<Car>> AddCar(Car car)
         {
