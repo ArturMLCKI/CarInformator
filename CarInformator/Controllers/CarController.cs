@@ -54,7 +54,7 @@ namespace CarInformator.Controllers
             return Ok(await _context.Cars.ToListAsync());
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Car>>> DeleteCar(int id)
+        public async Task<ActionResult<Car>> DeleteCar(int id)
         {
             var dbCars = await _context.Cars.FindAsync(id);
             if (dbCars == null)

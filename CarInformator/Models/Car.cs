@@ -15,8 +15,7 @@ namespace CarInformator.Models
         public string Generation { get; set; }
 
         public int ProductionYear { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        
         
     }
 }
