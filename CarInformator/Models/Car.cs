@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarInformator.Models.Historian;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarInformator.Models
@@ -18,6 +19,7 @@ namespace CarInformator.Models
         
         public int UserId { get; set; }
         public User User { get; set; }
-        
+
+        public ICollection<CarRepairHistorian> CarRepairs { get; set; }  
     }
 }
