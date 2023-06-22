@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CarInformator.Controllers
 {
@@ -17,17 +21,28 @@ namespace CarInformator.Controllers
             _usercontext = usercontext;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsersWithCars()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = await _usercontext.Users.ToListAsync();
-
+            var users = await _context.Users.ToListAsync();
             foreach (var user in users)
             {
-                var cars = await _context.Cars.Where(c => c.Id == user.UserId).ToListAsync();
+                var cars = await _context.Cars.Where(c => c.UserId == user.UserId).ToListAsync();
                 user.Cars = cars;
             }
-
             return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserWithCars(int id)
+        {
+            var user = await _usercontext.Users.Include(u => u.Cars).FirstOrDefaultAsync(c=> c.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound(); // Zwróć odpowiedź 404 Not Found, jeśli użytkownik nie został znaleziony
+            }
+
+            return Ok(user);
         }
     }
 }
