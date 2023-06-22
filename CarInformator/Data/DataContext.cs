@@ -12,12 +12,13 @@ namespace CarInformator.Data
 
         public DbSet<User> Users { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Car>()
-        //        .HasOne(u => u.User)
-        //        .WithMany(c => c.Cars)
-        //        .HasForeignKey(u => u.UserId);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Cars)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId);
+        }
+
     }
 }
