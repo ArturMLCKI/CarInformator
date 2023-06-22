@@ -21,14 +21,16 @@ namespace CarInformator.Controllers
             _usercontext = usercontext;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsersWithCars()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _usercontext.Users.ToListAsync();
+
             foreach (var user in users)
             {
                 var cars = await _context.Cars.Where(c => c.UserId == user.UserId).ToListAsync();
                 user.Cars = cars;
             }
+
             return Ok(users);
         }
 
