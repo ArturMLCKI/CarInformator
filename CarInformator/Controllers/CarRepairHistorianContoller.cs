@@ -11,14 +11,18 @@ namespace CarInformator.Controllers
     public class CarRepairHistorianContoller : ControllerBase
     {
         private readonly DataContext _context;
-        
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CarRepairHistorian>> GetIdCarRepair(int id)
+        public CarRepairHistorianContoller(DataContext context)
         {
-            var carRepair = await _context.CarRepairs.FindAsync(id);
+            _context = context;
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CarRepairHistorian>> GetId(int CarId)
+        {
+            var carRepair = await _context.CarRepairs.FindAsync(CarId);
             if (carRepair == null)
                 return BadRequest("Car Repair not found.");
             return Ok(carRepair);
         }
+
     }
 }

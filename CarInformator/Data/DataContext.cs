@@ -25,7 +25,7 @@ namespace CarInformator.Data
             modelBuilder.Entity<Car>()
                 .HasMany(c => c.CarRepairs)
                 .WithOne(r => r.Cars)
-                .HasForeignKey(c => c.CarId);
+                .HasPrincipalKey(c => c.CarRepairs);
             modelBuilder.Entity<CarRepairHistorian>()
                 .Property(c => c.Price)
                 .HasColumnType("decimal(18, 2)");
