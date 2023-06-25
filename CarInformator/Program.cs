@@ -1,4 +1,4 @@
-global using CarInformator.Data;
+using Carinformator.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 

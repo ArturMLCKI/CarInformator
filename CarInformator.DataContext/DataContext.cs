@@ -1,9 +1,8 @@
 ﻿using CarInformator.Models;
 using CarInformator.Models.Historian;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
-namespace CarInformator.Data
+namespace Carinformator.DataContext
 {
     public class DataContext : DbContext
     {
@@ -17,7 +16,7 @@ namespace CarInformator.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
+            object value = modelBuilder.Entity<User>()
                 .HasMany(u => u.Cars)
                 .WithOne(c => c.User)
                 .HasForeignKey(c => c.UserId);
@@ -25,10 +24,9 @@ namespace CarInformator.Data
             modelBuilder.Entity<Car>()
                 .HasMany(c => c.CarRepairs)
                 .WithOne(r => r.Cars)
-                .HasPrincipalKey(c => c.CarRepairs);
+                .HasForeignKey(c => c.CarId);
             modelBuilder.Entity<CarRepairHistorian>()
-                .Property(c => c.Price)
-                .HasColumnType("decimal(18, 2)");
+                .Property(c => c.Price);
         }
 
     }
