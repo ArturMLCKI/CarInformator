@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carinformator.Data;
+using CarInformator.Models.Historian;
 
 namespace CarInformator.Controllers
 {
@@ -10,7 +11,7 @@ namespace CarInformator.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
-        
+
         private readonly DataContext _context;
         public CarController(DataContext context)
         {
@@ -40,23 +41,26 @@ namespace CarInformator.Controllers
 
             return Ok(car);
         }
-        [HttpPut]
-        public async Task<ActionResult<List<Car>>> UpdateCar(Car request)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Car>> UpdateCar(int id, Car request )
         {
-            var dbCars = await _context.Cars.FindAsync(request.Id);
-            if (dbCars == null)
-                return BadRequest("Car not found.");
+            var dbCar = await _context.Cars.FindAsync(request.Id);
+            if (dbCar == null)
+                return NotFound("Car not found.");
 
+            dbCar.Brand = request.Brand;
+            dbCar.Model = request.Model;
+            dbCar.Generation = request.Generation;
+            dbCar.UserId = request.UserId;
 
-            dbCars.Brand = request.Brand;
-            dbCars.Model = request.Model;
-            dbCars.Generation = request.Generation;
-            dbCars.ProductionYear = request.ProductionYear;
-            dbCars.UserId = request.UserId;
             await _context.SaveChangesAsync();
 
-            return Ok(dbCars);
+            return Ok(dbCar);
         }
+
+
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Car>> DeleteCar(int id)
         {
@@ -65,9 +69,9 @@ namespace CarInformator.Controllers
                 return BadRequest("Car not found.");
 
             _context.Cars.Remove(dbCars);
-            await _context.SaveChangesAsync();  
+            await _context.SaveChangesAsync();
             return Ok(dbCars);
         }
-
     }
+    
 }
