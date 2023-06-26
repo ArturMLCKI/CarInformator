@@ -37,6 +37,7 @@ namespace CarInformator.Controllers
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
 
+
             return Ok(car);
         }
         [HttpPut]
