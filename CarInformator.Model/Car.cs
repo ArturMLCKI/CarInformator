@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarInformator.Models
 {
+    [Table("Cars")]
     public class Car
     {
         [Key]
@@ -16,7 +17,7 @@ namespace CarInformator.Models
         public string Generation { get; set; }
 
         public int ProductionYear { get; set; }
-        
+        [ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }
 

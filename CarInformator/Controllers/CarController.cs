@@ -19,7 +19,7 @@ namespace CarInformator.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
-            var cars = await _context.Cars.ToListAsync();
+            var cars = await _context.Cars.Take(3).ToListAsync();
             return Ok(cars);
         }
         [HttpGet("{id}")]
@@ -37,7 +37,7 @@ namespace CarInformator.Controllers
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Cars.ToListAsync());
+            return Ok(car);
         }
         [HttpPut]
         public async Task<ActionResult<List<Car>>> UpdateCar(Car request)
@@ -51,10 +51,10 @@ namespace CarInformator.Controllers
             dbCars.Model = request.Model;
             dbCars.Generation = request.Generation;
             dbCars.ProductionYear = request.ProductionYear;
-
+            dbCars.UserId = request.UserId;
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Cars.ToListAsync());
+            return Ok(dbCars);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<Car>> DeleteCar(int id)
@@ -65,7 +65,7 @@ namespace CarInformator.Controllers
 
             _context.Cars.Remove(dbCars);
             await _context.SaveChangesAsync();  
-            return Ok(await _context.Cars.ToListAsync());
+            return Ok(dbCars);
         }
 
     }

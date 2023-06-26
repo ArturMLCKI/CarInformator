@@ -24,7 +24,7 @@ namespace CarInformator.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsersWithCars()
         {
-            var users = await _usercontext.Users.ToListAsync();
+            var users = await _usercontext.Users.Take(3).ToListAsync();
 
             foreach (var user in users)
             {
