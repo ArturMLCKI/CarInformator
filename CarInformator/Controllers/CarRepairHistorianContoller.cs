@@ -17,11 +17,20 @@ namespace CarInformator.Controllers
             _context = context;
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<CarRepairHistorian>> GetId(int CarId)
+        public async Task<ActionResult<CarRepairHistorian>> GetId(int id)
         {
-            var carRepair = await _context.CarRepairs.FindAsync(CarId);
+            var carRepair = await _context.CarRepairs.FindAsync(id);
             if (carRepair == null)
                 return BadRequest("Car Repair not found.");
+            return Ok(carRepair);
+        }
+        [HttpPost]
+        public async Task<ActionResult<CarRepairHistorian>> AddRepair(CarRepairHistorian carRepair)
+        {
+            _context.CarRepairs.Add(carRepair);
+            await _context.SaveChangesAsync();
+
+
             return Ok(carRepair);
         }
         [HttpPut]
@@ -35,12 +44,22 @@ namespace CarInformator.Controllers
             dbCarsRepair.RepiarName = request.RepiarName;
             dbCarsRepair.RepiarDesc = request.RepiarDesc;
             dbCarsRepair.Price = request.Price;
-            dbCarsRepair.Date = request.Date;
 
+            _context.Update(dbCarsRepair);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Cars.ToListAsync());
+            return Ok(dbCarsRepair);
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<CarRepairHistorian>> DeleteRepair(int id)
+        {
+            var dbCarRepair = await _context.CarRepairs.FindAsync(id);
+            if (dbCarRepair == null)
+                return BadRequest("Car not found.");
 
+            _context.CarRepairs.Remove(dbCarRepair);
+            await _context.SaveChangesAsync();
+            return Ok(dbCarRepair);
         }
     }
 }

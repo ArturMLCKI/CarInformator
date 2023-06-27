@@ -9,7 +9,7 @@ namespace CarInformator.Models
     public class Car
     {
         [Key]
-        public int Id { get; set; }
+        public int CarId { get; set; }
 
         public string Brand { get; set; }   
 
@@ -23,7 +23,7 @@ namespace CarInformator.Models
         [JsonIgnore]
         public User? User { get; set; }
         [JsonIgnore]
-        public ICollection<CarRepairHistorian>? CarRepairs { get; set; }  
+        public List<CarRepairHistorian> CarRepairs { get; set; }  
 
         public List<CarInsuranceHistorian> InsuranceHistorians { get; set; }
     }

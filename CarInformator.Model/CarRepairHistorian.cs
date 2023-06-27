@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace CarInformator.Models.Historian
 {
@@ -11,9 +13,11 @@ namespace CarInformator.Models.Historian
         public string RepiarName { get; set; }
         public string RepiarDesc { get; set; }
         public decimal Price { get; set; }
-        public string Date { get; set; }
         [ForeignKey("Car")]
-        public int CarId { get; set; }
+        
+        public int? CarId { get; set; }
+        public Car? Cars { get; set; }
+        [JsonIgnore]
         public Car RepairedCars { get; set; }
 
 

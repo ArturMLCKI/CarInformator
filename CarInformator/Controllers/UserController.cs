@@ -47,5 +47,45 @@ namespace CarInformator.Controllers
 
             return Ok(user);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<User>> AddCar(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+
+            return Ok(user);
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<User>> UpdateUser(int id, User request)
+        {
+
+            var dbUser = await _context.Users.FindAsync(id);
+            if (dbUser == null)
+                return NotFound("Car not found.");
+
+
+            dbUser.Name = request.Name;
+            dbUser.Email = request.Email;
+            dbUser.DrivingExp = request.DrivingExp;
+
+
+            _context.Update(dbUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(dbUser);
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<User>> DeleteUser(int id)
+        {
+            var dbUsers = await _context.Users.FindAsync(id);
+            if (dbUsers == null)
+                return BadRequest("Car not found.");
+
+            _context.Users.Remove(dbUsers);
+            await _context.SaveChangesAsync();
+            return Ok(dbUsers);
+        }
     }
 }

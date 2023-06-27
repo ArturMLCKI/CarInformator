@@ -23,22 +23,23 @@ namespace Carinformator.Data
                 .WithOne(c => c.User)
                 .HasForeignKey(c => c.UserId);
 
+
             modelBuilder.Entity<Car>()
                 .HasMany(c => c.CarRepairs)
-                .WithOne(r => r.RepairedCars)
-                .HasForeignKey(c => c.CarId);
+                .WithOne(u => u.Cars)
+                .HasForeignKey(c => c.CarId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<CarRepairHistorian>()
                 .Property(c => c.Price)
-                .HasPrecision(18, 3);
+                .HasPrecision(18, 4);
+                
 
             modelBuilder.Entity<CarInsuranceHistorian>()
                 .HasMany(e => e.InsuredCars)
-                .WithMany(e => e.InsuranceHistorians)
-                .UsingEntity(
-                    "CarInsurance",
-                    l => l.HasOne(typeof(Car)).WithMany().HasForeignKey("CarId").HasPrincipalKey(nameof(Car.Id)),
-                    r => r.HasOne(typeof(CarInsuranceHistorian)).WithMany().HasForeignKey("CarInsuranceId").HasPrincipalKey(nameof(CarInsuranceHistorian.Id)),
-                    j => j.HasKey("CarId", "CarInsuranceId"));
+                .WithMany(e => e.InsuranceHistorians);
+                
 
         }
 
