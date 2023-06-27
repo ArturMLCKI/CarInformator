@@ -14,6 +14,8 @@ namespace Carinformator.Data
 
         public DbSet<CarRepairHistorian> CarRepairs { get; set; }
 
+        public DbSet<CarInsuranceHistorian> CarInsurances { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             object value = modelBuilder.Entity<User>()
@@ -23,12 +25,23 @@ namespace Carinformator.Data
 
             modelBuilder.Entity<Car>()
                 .HasMany(c => c.CarRepairs)
-                .WithOne(r => r.Cars)
+                .WithOne(r => r.RepairedCars)
                 .HasForeignKey(c => c.CarId);
             modelBuilder.Entity<CarRepairHistorian>()
                 .Property(c => c.Price)
                 .HasPrecision(18, 3);
+
+            modelBuilder.Entity<CarInsuranceHistorian>()
+                .HasMany(e => e.InsuredCars)
+                .WithMany(e => e.InsuranceHistorians)
+                .UsingEntity(
+                    "CarInsurance",
+                    l => l.HasOne(typeof(Car)).WithMany().HasForeignKey("CarId").HasPrincipalKey(nameof(Car.Id)),
+                    r => r.HasOne(typeof(CarInsuranceHistorian)).WithMany().HasForeignKey("CarInsuranceId").HasPrincipalKey(nameof(CarInsuranceHistorian.Id)),
+                    j => j.HasKey("CarId", "CarInsuranceId"));
+
         }
 
+       
     }
 }

@@ -24,5 +24,7 @@ namespace CarInformator.Models
         public User? User { get; set; }
         [JsonIgnore]
         public ICollection<CarRepairHistorian>? CarRepairs { get; set; }  
+
+        public List<CarInsuranceHistorian> InsuranceHistorians { get; set; }
     }
 }

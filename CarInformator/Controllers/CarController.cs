@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carinformator.Data;
 using CarInformator.Models.Historian;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarInformator.Controllers
 {
@@ -42,25 +43,26 @@ namespace CarInformator.Controllers
             return Ok(car);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<Car>> UpdateCar(int id, Car request )
+        public async Task<ActionResult<Car>> UpdateCar(int id, Car request)
         {
-            var dbCar = await _context.Cars.FindAsync(request.Id);
+            
+            var dbCar = await _context.Cars.FindAsync(id);
             if (dbCar == null)
                 return NotFound("Car not found.");
+
 
             dbCar.Brand = request.Brand;
             dbCar.Model = request.Model;
             dbCar.Generation = request.Generation;
+            dbCar.ProductionYear = request.ProductionYear;
             dbCar.UserId = request.UserId;
 
+
+            _context.Update(dbCar);
             await _context.SaveChangesAsync();
 
             return Ok(dbCar);
         }
-
-
-
-
         [HttpDelete("{id}")]
         public async Task<ActionResult<Car>> DeleteCar(int id)
         {

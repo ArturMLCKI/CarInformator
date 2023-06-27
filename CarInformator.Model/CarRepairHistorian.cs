@@ -14,7 +14,7 @@ namespace CarInformator.Models.Historian
         public string Date { get; set; }
         [ForeignKey("Car")]
         public int CarId { get; set; }
-        public Car Cars { get; set; }
+        public Car RepairedCars { get; set; }
 
 
     }
