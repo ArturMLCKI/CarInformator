@@ -26,7 +26,7 @@ namespace Carinformator.Data
 
             modelBuilder.Entity<Car>()
                 .HasMany(c => c.CarRepairs)
-                .WithOne(u => u.Cars)
+                .WithOne(u => u.RepairedCars)
                 .HasForeignKey(c => c.CarId)
                 .OnDelete(DeleteBehavior.Restrict);
 

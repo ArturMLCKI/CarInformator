@@ -104,14 +104,12 @@ namespace CarInformator.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CarId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("RepairedCarsCarId")
-                        .HasColumnType("int");
 
                     b.Property<string>("RepiarDesc")
                         .IsRequired()
@@ -124,8 +122,6 @@ namespace CarInformator.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("RepairedCarsCarId");
 
                     b.ToTable("CarRepairs");
                 });
@@ -179,18 +175,11 @@ namespace CarInformator.Data.Migrations
 
             modelBuilder.Entity("CarInformator.Models.Historian.CarRepairHistorian", b =>
                 {
-                    b.HasOne("CarInformator.Models.Car", "Cars")
+                    b.HasOne("CarInformator.Models.Car", "RepairedCars")
                         .WithMany("CarRepairs")
                         .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("CarInformator.Models.Car", "RepairedCars")
-                        .WithMany()
-                        .HasForeignKey("RepairedCarsCarId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Cars");
 
                     b.Navigation("RepairedCars");
                 });

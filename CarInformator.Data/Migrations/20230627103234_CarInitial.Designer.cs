@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarInformator.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230627085934_NewTableCarInsurance")]
-    partial class NewTableCarInsurance
+    [Migration("20230627103234_CarInitial")]
+    partial class CarInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,28 @@ namespace CarInformator.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CarCarInsuranceHistorian", b =>
+                {
+                    b.Property<int>("InsuranceHistoriansId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsuredCarsCarId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InsuranceHistoriansId", "InsuredCarsCarId");
+
+                    b.HasIndex("InsuredCarsCarId");
+
+                    b.ToTable("CarCarInsuranceHistorian");
+                });
+
             modelBuilder.Entity("CarInformator.Models.Car", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CarId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarId"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -51,7 +66,7 @@ namespace CarInformator.Data.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CarId");
 
                     b.HasIndex("UserId");
 
@@ -80,7 +95,7 @@ namespace CarInformator.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarInsurances");
+                    b.ToTable("Car Insurances");
                 });
 
             modelBuilder.Entity("CarInformator.Models.Historian.CarRepairHistorian", b =>
@@ -91,16 +106,13 @@ namespace CarInformator.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CarId")
+                    b.Property<int?>("CarId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<string>("Date")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("RepiarDesc")
                         .IsRequired()
@@ -140,19 +152,19 @@ namespace CarInformator.Data.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("CarInsurance", b =>
+            modelBuilder.Entity("CarCarInsuranceHistorian", b =>
                 {
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
+                    b.HasOne("CarInformator.Models.Historian.CarInsuranceHistorian", null)
+                        .WithMany()
+                        .HasForeignKey("InsuranceHistoriansId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("CarInsuranceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CarId", "CarInsuranceId");
-
-                    b.HasIndex("CarInsuranceId");
-
-                    b.ToTable("CarInsurance");
+                    b.HasOne("CarInformator.Models.Car", null)
+                        .WithMany()
+                        .HasForeignKey("InsuredCarsCarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarInformator.Models.Car", b =>
@@ -169,25 +181,10 @@ namespace CarInformator.Data.Migrations
                     b.HasOne("CarInformator.Models.Car", "RepairedCars")
                         .WithMany("CarRepairs")
                         .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("RepairedCars");
-                });
-
-            modelBuilder.Entity("CarInsurance", b =>
-                {
-                    b.HasOne("CarInformator.Models.Car", null)
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarInformator.Models.Historian.CarInsuranceHistorian", null)
-                        .WithMany()
-                        .HasForeignKey("CarInsuranceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarInformator.Models.Car", b =>

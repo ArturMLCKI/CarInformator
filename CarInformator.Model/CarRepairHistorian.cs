@@ -14,12 +14,9 @@ namespace CarInformator.Models.Historian
         public string RepiarDesc { get; set; }
         public decimal Price { get; set; }
         [ForeignKey("Car")]
-        
         public int? CarId { get; set; }
-        public Car? Cars { get; set; }
-        [JsonIgnore]
         public Car RepairedCars { get; set; }
 
 
-    }
+    };
 }
