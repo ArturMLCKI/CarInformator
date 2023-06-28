@@ -34,7 +34,7 @@ namespace CarInformator.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Car>> AddCar(Car car)
+        public async Task<ActionResult<List<Car>>> AddCar(Car car)
         {
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
@@ -43,12 +43,12 @@ namespace CarInformator.Controllers
             return Ok(car);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<Car>> UpdateCar(int id, Car request)
+        public async Task<ActionResult<List<Car>>> UpdateCar(int id, Car request)
         {
             
             var dbCar = await _context.Cars.FindAsync(id);
             if (dbCar == null)
-                return NotFound("Car not found.");
+                return BadRequest("Car not found");
 
 
             dbCar.Brand = request.Brand;
@@ -57,12 +57,12 @@ namespace CarInformator.Controllers
             dbCar.ProductionYear = request.ProductionYear;
             dbCar.UserId = request.UserId;
 
-
             _context.Update(dbCar);
             await _context.SaveChangesAsync();
 
             return Ok(dbCar);
         }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Car>> DeleteCar(int id)
         {

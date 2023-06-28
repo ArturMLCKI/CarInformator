@@ -25,7 +25,7 @@ namespace CarInformator.Controllers
             return Ok(carRepair);
         }
         [HttpPost]
-        public async Task<ActionResult<CarRepairHistorian>> AddRepair(CarRepairHistorian carRepair)
+        public async Task<ActionResult<List<CarRepairHistorian>>> AddRepair(CarRepairHistorian carRepair)
         {
             _context.CarRepairs.Add(carRepair);
             await _context.SaveChangesAsync();
