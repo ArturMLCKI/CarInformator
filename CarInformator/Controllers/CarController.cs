@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Carinformator.Data;
 using CarInformator.Models.Historian;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace CarInformator.Controllers
 {
@@ -21,6 +22,8 @@ namespace CarInformator.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
+            Log.Information("Get Cars");
+
             var cars = await _context.Cars.Take(3).ToListAsync();
             return Ok(cars);
         }
