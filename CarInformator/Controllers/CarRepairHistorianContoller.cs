@@ -21,6 +21,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<CarRepairHistorian>> GetCarRepairId(int id)
         {
             Log.Information("GetCarsRepair {id} at {RequestTime}",id, DateTime.Now);
+            Log.Warning("Processing request from {CarRepiar}", GetCarRepairId);
             var carRepair = await _context.CarRepairs.FindAsync(id);
             if (carRepair == null)
                 return BadRequest("Car Repair not found.");
@@ -30,6 +31,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<List<CarRepairHistorian>>> AddRepair(CarRepairHistorian carRepair)
         {
             Log.Information("AddRepair at {RequestTime}", DateTime.Now);
+            Log.Warning("Processing request from {CarRepair}", AddRepair);
             _context.CarRepairs.Add(carRepair);
             await _context.SaveChangesAsync();
 
@@ -40,6 +42,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<List<CarRepairHistorian>>> UpdateCarRepair(CarRepairHistorian request)
         {
             Log.Information("UpdateCarRepair at {RequestTime}", DateTime.Now);
+            Log.Warning("Processing request from {CarRepair}", UpdateCarRepair);
             var dbCarsRepair = await _context.CarRepairs.FindAsync(request.Id);
             if (dbCarsRepair == null)
                 return BadRequest("Car not found.");
@@ -58,6 +61,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<CarRepairHistorian>> DeleteRepair(int id)
         {
             Log.Information("DeleteCarRepair at {RequestTime} ", DateTime.Now);
+            Log.Warning("Processing request from {CarRepiar}", DeleteRepair);
             var dbCarRepair = await _context.CarRepairs.FindAsync(id);
             if (dbCarRepair == null)
                 return BadRequest("Car not found.");

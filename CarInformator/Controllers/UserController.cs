@@ -41,20 +41,22 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<User>> GetUserWithCars(int id)
         {
             Log.Information("GetUser {id} at {time}",id, DateTime.Now);
+            Log.Warning("Processing request from {User}",GetUserWithCars );
             var user = await _usercontext.Users.Include(u => u.Cars).FirstOrDefaultAsync(c=> c.UserId == id);
 
             if (user == null)
             {
-                return NotFound(); // Zwróć odpowiedź 404 Not Found, jeśli użytkownik nie został znaleziony
+                return NotFound(); 
             }
 
             return Ok(user);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> AddCar(User user)
+        public async Task<ActionResult<User>> AddUser(User user)
         {
             Log.Information("{time}:AddUser:{time}", DateTime.Now);
+            Log.Warning("Processing request from {User}", AddUser);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -65,6 +67,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<User>> UpdateUser(int id, User request)
         {
             Log.Information("{time}:UpdateUser:{time}", DateTime.Now);
+            Log.Warning("Processing request from {User}", UpdateUser);
             var dbUser = await _context.Users.FindAsync(id);
             if (dbUser == null)
                 return NotFound("Car not found.");
@@ -84,6 +87,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
             Log.Information("{time}:DeleteUser:{time}", DateTime.Now);
+            Log.Warning("Processing request from {User}", UpdateUser);
             var dbUsers = await _context.Users.FindAsync(id);
             if (dbUsers == null)
                 return BadRequest("Car not found.");

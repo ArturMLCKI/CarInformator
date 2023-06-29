@@ -23,15 +23,16 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
             Log.Information("{time}:GetCars:{time}",DateTimeOffset.UtcNow);
-
+            Log.Warning("Processing request from {Car}", GetCars);
             var cars = await _context.Cars.Take(3).ToListAsync();
             return Ok(cars);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Car>> GetId(int id)
+        public async Task<ActionResult<Car>> GetCarId(int id)
         {
             //Log.Information("{time}:GetCar:{time}", DateTimeOffset.UtcNow);
             Log.Information("GetCar {Id} at {RequestTime}", id, DateTime.Now);
+            Log.Warning("Processing request from {Car}", GetCarId);
             var car = await _context.Cars.FindAsync(id);
             if (car == null)
                 return BadRequest("Car not found.");
@@ -42,6 +43,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<List<Car>>> AddCar(Car car)
         {
             Log.Information("AddCar at {RequestTime}", DateTime.Now);
+            Log.Warning("Processing request from {Car}", AddCar);
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
 
@@ -52,6 +54,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<List<Car>>> UpdateCar(int id, Car request)
         {
             Log.Information("UpdateCars at {RequestTime}", DateTime.Now);
+            Log.Warning("Processing request from {Car}", UpdateCar);
             var dbCar = await _context.Cars.FindAsync(id);
             if (dbCar == null)
                 return BadRequest("Car not found");
@@ -73,6 +76,7 @@ namespace CarInformator.Controllers
         public async Task<ActionResult<Car>> DeleteCar(int id)
         {
             Log.Information("DeleteCars {RequestTime}", DateTime.Now);
+            Log.Warning("Processing request from {Car}", DeleteCar);
             var dbCars = await _context.Cars.FindAsync(id);
             if (dbCars == null)
                 return BadRequest("Car not found.");
