@@ -22,7 +22,7 @@ namespace CarInformator.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
-            Log.Information("Get Cars");
+            Log.Information("{time}:GetCars:{time}",DateTimeOffset.UtcNow);
 
             var cars = await _context.Cars.Take(3).ToListAsync();
             return Ok(cars);
@@ -30,6 +30,8 @@ namespace CarInformator.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetId(int id)
         {
+            //Log.Information("{time}:GetCar:{time}", DateTimeOffset.UtcNow);
+            Log.Information("GetCar {Id} at {RequestTime}", id, DateTime.Now);
             var car = await _context.Cars.FindAsync(id);
             if (car == null)
                 return BadRequest("Car not found.");
@@ -39,6 +41,7 @@ namespace CarInformator.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Car>>> AddCar(Car car)
         {
+            Log.Information("AddCar at {RequestTime}", DateTime.Now);
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
 
@@ -48,7 +51,7 @@ namespace CarInformator.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Car>>> UpdateCar(int id, Car request)
         {
-            
+            Log.Information("UpdateCars at {RequestTime}", DateTime.Now);
             var dbCar = await _context.Cars.FindAsync(id);
             if (dbCar == null)
                 return BadRequest("Car not found");
@@ -69,6 +72,7 @@ namespace CarInformator.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Car>> DeleteCar(int id)
         {
+            Log.Information("DeleteCars {RequestTime}", DateTime.Now);
             var dbCars = await _context.Cars.FindAsync(id);
             if (dbCars == null)
                 return BadRequest("Car not found.");

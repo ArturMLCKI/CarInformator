@@ -7,6 +7,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Carinformator.Data;
+using Serilog;
 
 namespace CarInformator.Controllers
 {
@@ -24,6 +25,7 @@ namespace CarInformator.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsersWithCars()
         {
+            Log.Information("{time}:GetUsers:{time}",DateTime.Now);
             var users = await _usercontext.Users.Take(3).ToListAsync();
 
             foreach (var user in users)
@@ -38,6 +40,7 @@ namespace CarInformator.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserWithCars(int id)
         {
+            Log.Information("GetUser {id} at {time}",id, DateTime.Now);
             var user = await _usercontext.Users.Include(u => u.Cars).FirstOrDefaultAsync(c=> c.UserId == id);
 
             if (user == null)
@@ -51,6 +54,7 @@ namespace CarInformator.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddCar(User user)
         {
+            Log.Information("{time}:AddUser:{time}", DateTime.Now);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -60,7 +64,7 @@ namespace CarInformator.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<User>> UpdateUser(int id, User request)
         {
-
+            Log.Information("{time}:UpdateUser:{time}", DateTime.Now);
             var dbUser = await _context.Users.FindAsync(id);
             if (dbUser == null)
                 return NotFound("Car not found.");
@@ -79,6 +83,7 @@ namespace CarInformator.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
+            Log.Information("{time}:DeleteUser:{time}", DateTime.Now);
             var dbUsers = await _context.Users.FindAsync(id);
             if (dbUsers == null)
                 return BadRequest("Car not found.");
